@@ -7,7 +7,7 @@ server. Build at the final path prefix:
 DEMO_BASE=/portfolio/dossier-folders/ npm run build
 ```
 
-The verified public destination is intended to be
+The verified public destination is
 `https://hickman.biz/portfolio/dossier-folders`. The existing website owns routing
 and deployment; this repository owns the component and demo source. Copy only
 the demo's index and assets to that route. Do not deploy `dist/library/`, private

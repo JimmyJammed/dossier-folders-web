@@ -31,5 +31,21 @@
       "skipped": 5,
       "failed": 0
     }
+  },
+  "editorFollowUp": {
+    "revision": "591cbf08567fad6453173cb00953ac497a07a980",
+    "passed": 28,
+    "failed": 0,
+    "projects": [
+      "chromium",
+      "firefox",
+      "webkit",
+      "mobile-webkit"
+    ]
+  },
+  "hosted": {
+    "url": "https://hickman.biz/portfolio/dossier-folders",
+    "passed": true,
+    "artifactFilesCompared": 25
   }
 }
