@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 — 2026-09-14
+
+- Synchronize preset, record, and block-kind menus with editor state.
+- Mark edited/imported configurations as custom so every preset can be selected again.
+- Retain menu focus and collapsed sections across redraws; discard stale debounced edits after preset/reset/import changes.
+
 ## 0.1.1 — 2026-09-14
 
 - Keep tab labels transparent on hover; only the complete folder lifts.
