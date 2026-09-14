@@ -144,10 +144,10 @@
 .dossier[data-layout="stack"] .folder-tab {
   touch-action: pan-y;
 }
-:where(.dossier) .folder-tab {
+.dossier .folder-tab {
   position: absolute;
   top: 4px;
-  height: 52px;
+  height: calc(var(--df-tab-height, 64px) - 12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -164,6 +164,11 @@
   font-size: 12px;
   font-weight: 750;
   touch-action: pan-x;
+}
+.dossier .folder-tab:is(:hover, :active, :focus) {
+  background: transparent;
+  box-shadow: none;
+  filter: none;
 }
 /* The hovered tab keeps a transparent bridge to its resting bottom edge, so
    lifting the paper cannot move the native hit target away from the pointer. */
@@ -197,7 +202,7 @@
 }
 :where(.dossier) .folder-back-shadow {
   position: absolute;
-  inset: 64px 0 0;
+  inset: var(--df-tab-height, 64px) 0 0;
   border-radius: 18px;
   box-shadow:
     0 36px 90px -24px #000a,
@@ -207,7 +212,7 @@
 }
 :where(.dossier) .folder-opening-shadow {
   position: absolute;
-  inset: 64px 0 0;
+  inset: var(--df-tab-height, 64px) 0 0;
   border-radius: 18px;
   background: linear-gradient(0deg, #0905169c, transparent 80%);
   opacity: 0;
@@ -409,7 +414,7 @@
 }
 :where(.dossier) .folder-content {
   position: absolute;
-  top: 66px;
+  top: calc(var(--df-tab-height, 64px) + 2px);
   left: 0;
   right: 0;
   bottom: 0;
@@ -1300,15 +1305,13 @@
 }
 
 /* Very narrow embeds retain usable controls even when the full reading sheet is scaled down. */
-.dossier[data-compact-tabs="true"][data-state="closed"] .folder-tab {
-  height: calc(44px / var(--df-closed-scale));
-  background: var(--folder-color);
-  border-radius: 18px 18px 0 0;
+.dossier[data-compact-tabs="true"] .folder-tab {
+  padding-block: 0;
 }
-.dossier[data-compact-tabs="true"][data-state="closed"] .folder-tab span {
+.dossier[data-compact-tabs="true"] .folder-tab span {
   font-size: calc(14px / var(--df-closed-scale));
 }
-.dossier[data-compact-tabs="true"][data-state="closed"] .folder-tab img {
+.dossier[data-compact-tabs="true"] .folder-tab img {
   width: calc(var(--logo-width) / var(--df-closed-scale));
   height: calc(var(--logo-height) / var(--df-closed-scale));
   max-height: calc(30px / var(--df-closed-scale));

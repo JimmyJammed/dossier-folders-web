@@ -4,7 +4,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178c6)
 ![React: optional](https://img.shields.io/badge/React-optional-149eca)
 ![license: MIT](https://img.shields.io/badge/license-MIT-2e7d32)
-![version: 0.1.0](https://img.shields.io/badge/version-0.1.0-475569)
+![version: 0.1.1](https://img.shields.io/badge/version-0.1.1-475569)
 
 A tactile, accessible folder interface for stories, projects, and collections.
 Framework-neutral TypeScript, an optional React adapter, and a visual/content editor.
@@ -31,11 +31,11 @@ plus Playwright Chromium (`npx playwright install chromium`).
 
 ## Use the component
 
-Download `dossier-folders-0.1.0.tgz` from the [GitHub release](https://github.com/JimmyJammed/dossier-folders-web/releases/tag/v0.1.0), or run `npm run pack:library`.
+Download `dossier-folders-0.1.1.tgz` from the [GitHub release](https://github.com/JimmyJammed/dossier-folders-web/releases/tag/v0.1.1), or run `npm run pack:library`.
 Public npm publication is deferred; the badge above is the repository version.
 
 ```sh
-npm install ./dossier-folders-0.1.0.tgz
+npm install ./dossier-folders-0.1.1.tgz
 ```
 
 ```ts
