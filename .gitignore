@@ -1,0 +1,7 @@
+node_modules/
+dist/
+artifacts/
+.package-staging/
+test-results/
+playwright-report/
+.DS_Store
