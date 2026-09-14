@@ -1,0 +1,1315 @@
+.dossier {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px 36px;
+  color: #f5efdf;
+  font-family: var(--df-body, system-ui, sans-serif);
+  font-size: 16px;
+  line-height: normal;
+  font-variant-numeric: normal;
+  -webkit-font-smoothing: antialiased;
+}
+/* Keep the paper independent of the host page's base typography and section
+   treatments. These defaults also apply after the scene enters its dialog. */
+:where(.dossier),
+:where(.dossier) *,
+:where(.dossier) *::before,
+:where(.dossier) *::after {
+  box-sizing: border-box;
+}
+.dossier button,
+.dossier a {
+  -webkit-tap-highlight-color: transparent;
+}
+.dossier button {
+  font: inherit;
+}
+.dossier a,
+.dossier a:hover {
+  color: inherit;
+}
+.dossier :where(a) {
+  border: 0;
+  text-decoration: underline;
+  transition: none;
+}
+.dossier :where(section) {
+  position: static;
+  isolation: auto;
+  padding: 0;
+  background: transparent;
+}
+.dossier :where(section)::after {
+  content: none;
+  display: none;
+}
+:where(.dossier) .cabinet-hint {
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  text-align: center;
+  color: #a5b1c2;
+  margin: 36px 0 0;
+}
+:where(.dossier) .cabinet-hint > span:first-child {
+  margin-right: 6px;
+}
+:where(.dossier) .hint-mobile {
+  display: none;
+}
+:where(.dossier) .cabinet-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 18px auto 0;
+  padding: 0 5px 8px;
+  color: #ded7c2;
+  font:
+    600 clamp(24px, 2.2vw, 30px) / 1.2 "Caveat",
+    "Bradley Hand",
+    "Segoe Script",
+    cursive;
+  transform: rotate(-2deg);
+}
+:where(.dossier) .cabinet-note svg {
+  width: 38px;
+  height: 36px;
+  flex: none;
+  overflow: visible;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.8;
+}
+.dossier:not([data-enhanced]) .cabinet-note {
+  display: none;
+}
+:where(.dossier) .scene-home {
+  position: relative;
+}
+:where(.dossier) .cabinet-scene {
+  position: relative;
+  width: 100%;
+}
+.dossier[data-enhanced] .folder {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.dossier[data-enhanced] .folder-sizing {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+:where(.dossier) .folder-sizing {
+  color: var(--folder-ink);
+}
+:where(.dossier) .folder-silhouette {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+:where(.dossier) .folder-silhouette path {
+  fill: var(--folder-color);
+}
+:where(.dossier) .folder-tab-viewport {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 68px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  pointer-events: none;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+}
+:where(.dossier) .folder-tab-viewport::-webkit-scrollbar {
+  display: none;
+}
+:where(.dossier) .folder-tab-track {
+  height: 100%;
+  position: relative;
+}
+.dossier[data-layout="stack"] .folder-tab-viewport {
+  overflow-x: hidden;
+  touch-action: pan-y;
+}
+.dossier[data-layout="stack"] .folder-tab {
+  touch-action: pan-y;
+}
+:where(.dossier) .folder-tab {
+  position: absolute;
+  top: 4px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, calc(var(--tab-width, 184px) * 0.05 - 1.2px), 8px);
+  background: transparent;
+  border: 0;
+  color: var(--folder-ink);
+  cursor: pointer;
+  padding: 8px clamp(6px, calc(var(--tab-width, 184px) * 0.1 - 4.4px), 14px);
+  pointer-events: auto;
+  white-space: nowrap;
+  border-radius: 10px 10px 3px 3px;
+  line-height: 1;
+  font-size: 12px;
+  font-weight: 750;
+  touch-action: pan-x;
+}
+/* The hovered tab keeps a transparent bridge to its resting bottom edge, so
+   lifting the paper cannot move the native hit target away from the pointer. */
+.dossier[data-enhanced][data-motion="full"][data-state="closed"]
+  .folder-tab:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% - 3px);
+  height: calc(var(--hover-reach) + 3px);
+  pointer-events: auto;
+}
+:where(.dossier) .folder-tab img {
+  display: block;
+  max-width: clamp(76px, calc(var(--tab-width, 184px) - 26px), 117px);
+  max-height: 34px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+}
+:where(.dossier) .folder-tab span {
+  pointer-events: none;
+  font-size: clamp(10px, calc(7.4px + var(--tab-width, 184px) * 0.025), 12px);
+  line-height: 1;
+}
+:where(.dossier) .folder-tab:focus-visible {
+  outline: 2px solid var(--folder-ink);
+  outline-offset: -7px;
+}
+:where(.dossier) .folder-back-shadow {
+  position: absolute;
+  inset: 64px 0 0;
+  border-radius: 18px;
+  box-shadow:
+    0 36px 90px -24px #000a,
+    0 8px 24px -8px #0007;
+  opacity: 0;
+  pointer-events: none;
+}
+:where(.dossier) .folder-opening-shadow {
+  position: absolute;
+  inset: 64px 0 0;
+  border-radius: 18px;
+  background: linear-gradient(0deg, #0905169c, transparent 80%);
+  opacity: 0;
+  pointer-events: none;
+}
+:where(.dossier) .folder-crease {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: linear-gradient(#0003, #ffffff20);
+  pointer-events: none;
+}
+:where(.dossier) .folder-cover {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+:where(.dossier) .cover-projection {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 -2px 2px #00000020);
+}
+:where(.dossier) .cover-paper {
+  fill: var(--folder-color);
+}
+:where(.dossier) .cover-edge {
+  fill: none;
+  stroke: #ffffff29;
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+:where(.dossier) .cabinet-front {
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  bottom: -2px;
+  pointer-events: none;
+  border-radius: 13px 13px 16px 16px;
+  box-shadow:
+    0 35px 55px -25px #000b,
+    0 2px 2px #030811b3;
+}
+:where(.dossier) .cabinet-material {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  clip-path: polygon(
+    0 0,
+    18% 0,
+    20% 14px,
+    80% 14px,
+    82% 0,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
+  background: linear-gradient(115deg, #253751, #1f304a 65%, #243650);
+  box-shadow:
+    inset 0 1px 0 #8197b833,
+    inset 0 -2px 0 #07101b80;
+}
+:where(.dossier) .cabinet-material:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.17;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.32' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:where(.dossier) .cabinet-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max-content;
+  max-width: 80%;
+  text-align: center;
+  font-family: "Black Ops One", Impact, sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(27px, 4.6vw, 64px);
+  line-height: 1.06;
+  letter-spacing: 0.025em;
+  color: #a1acc03c;
+  padding: 14px 16px 12px;
+  border-top: 5px solid currentColor;
+  border-bottom: 5px solid currentColor;
+  mask-image: repeating-linear-gradient(
+    174deg,
+    #000 0px,
+    #000 2px,
+    #0009 2.5px,
+    #000 3px
+  );
+}
+:where(.dossier) .cabinet-stamp span {
+  display: block;
+}
+/* The modal is a viewport, not a scroll container: native focus must not scroll
+   the whole cabinet during its transfer. Reading content scrolls on its own. */
+.dossier dialog {
+  padding: 0;
+  border: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  position: fixed;
+  inset: 0;
+  margin: 0;
+  background: transparent;
+  color: inherit;
+  overflow: clip;
+  overscroll-behavior: contain;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+.dossier dialog::backdrop {
+  background: #07101d80;
+  backdrop-filter: blur(3px);
+}
+:where(.dossier) .dialog-scene-slot {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.dossier dialog .cabinet-scene {
+  position: absolute;
+}
+:where(.dossier) .record-close {
+  position: fixed;
+  z-index: 100;
+  right: var(--record-right, 24px);
+  top: var(--record-top, 24px);
+  appearance: none;
+  background: linear-gradient(145deg, #ffffff14, #ffffff03), #13203588;
+  border: 0;
+  outline: none;
+  color: #fff5e7;
+  border-radius: 99px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 76px;
+  height: 44px;
+  padding: 0 18px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1;
+  isolation: isolate;
+  box-shadow: 0 6px 20px -8px #0006;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  transition: transform 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+:where(.dossier) .record-close::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 35% 0%, #ffffff38, transparent 78%),
+    linear-gradient(135deg, #ffffff16, #ffffff05);
+  opacity: 0;
+  transition: opacity 180ms ease-out;
+}
+.dossier[data-state="open"] .record-close:not([hidden]) {
+  display: inline-flex;
+}
+:where(.dossier) .record-close span {
+  font: inherit;
+}
+:where(.dossier) .record-close:focus-visible {
+  outline: none;
+}
+:where(.dossier) .record-close:focus-visible::before {
+  opacity: 1;
+}
+@media (hover: hover) {
+  :where(.dossier) .record-close:hover::before {
+    opacity: 1;
+  }
+}
+:where(.dossier) .record-close:active {
+  transform: translateY(1px) scale(0.96);
+}
+.dossier[data-motion="reduced"] .record-close,
+.dossier[data-motion="reduced"] .record-close::before {
+  transition: none;
+  transform: none;
+}
+:where(.dossier) .folder-content {
+  position: absolute;
+  top: 66px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 48px 24px;
+  display: flex;
+  flex-direction: column;
+  color: var(--folder-ink);
+  pointer-events: none;
+  overflow: hidden;
+}
+.dossier[data-enhanced] .folder:not([data-selected]) .folder-content {
+  visibility: hidden;
+}
+.dossier[data-enhanced] .folder[data-selected] .folder-content {
+  visibility: visible;
+}
+.dossier[data-state="open"] .folder[data-selected] .folder-content {
+  pointer-events: auto;
+}
+:where(.dossier) .record-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 22px 0 26px;
+  border-bottom: 1px solid currentColor;
+  color: var(--folder-ink);
+}
+:where(.dossier) .record-company {
+  font-weight: 750;
+  font-size: 19px;
+  margin: 0 0 8px;
+}
+:where(.dossier) .record-role {
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.6;
+}
+:where(.dossier) .record-dates {
+  font-size: 12px;
+  white-space: nowrap;
+  margin: 0;
+}
+:where(.dossier) .record-scroll {
+  overflow: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+  padding: 36px 12px 40px 0;
+  scrollbar-width: thin;
+  scrollbar-color: currentColor transparent;
+  outline-offset: -3px;
+}
+:where(.dossier) .record-scroll-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  isolation: isolate;
+  --record-scroll-edge-size: 24px;
+}
+:where(.dossier) .record-scroll-frame > .record-scroll {
+  flex: 1 1 auto;
+  scroll-padding-block: var(--record-scroll-edge-size);
+}
+:where(.dossier) .record-scroll-edge {
+  position: absolute;
+  left: 0;
+  right: 12px;
+  height: var(--record-scroll-edge-size);
+  z-index: 1;
+  opacity: 0;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--folder-color) 72%, transparent);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+:where(.dossier) .record-scroll-edge--top {
+  top: 0;
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000f 12%,
+    #000b 36%,
+    #0005 65%,
+    #0001 85%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000f 12%,
+    #000b 36%,
+    #0005 65%,
+    #0001 85%,
+    transparent 100%
+  );
+}
+:where(.dossier) .record-scroll-edge--bottom {
+  bottom: 0;
+  mask-image: linear-gradient(
+    to top,
+    #000 0%,
+    #000f 12%,
+    #000b 36%,
+    #0005 65%,
+    #0001 85%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to top,
+    #000 0%,
+    #000f 12%,
+    #000b 36%,
+    #0005 65%,
+    #0001 85%,
+    transparent 100%
+  );
+}
+.dossier:not([data-enhanced]) .record-scroll-frame {
+  display: block;
+  flex: none;
+}
+.dossier:not([data-enhanced]) .record-scroll-edge {
+  display: none;
+}
+:where(.dossier) .record-layout {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 48px;
+}
+:where(.dossier) .record-layout:not(.record-layout--media) {
+  max-width: 880px;
+}
+:where(.dossier) .record-layout--media {
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 32%);
+  gap: clamp(32px, 6vw, 100px);
+}
+:where(.dossier) .record-headline {
+  font: 400 clamp(35px, 4vw, 64px) / 1.06 var(--df-display, Georgia, serif);
+  letter-spacing: -0.018em;
+  margin: 0 0 24px;
+  max-width: 780px;
+}
+:where(.dossier) .record-summary {
+  font-size: 16px;
+  line-height: 1.85;
+  margin: 0 0 23px;
+  max-width: 740px;
+}
+:where(.dossier) .record-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 34px;
+}
+:where(.dossier) .record-chips li {
+  font-size: 10px;
+  padding: 7px 10px;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-radius: 4px;
+}
+:where(.dossier) .record-section {
+  font-size: 15px;
+  line-height: 1.9;
+  max-width: 800px;
+}
+:where(.dossier) .record-section p {
+  margin: 0 0 20px;
+}
+:where(.dossier) .record-section-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0 0 18px;
+}
+:where(.dossier) .record-section a {
+  text-underline-offset: 3px;
+}
+:where(.dossier) .record-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+:where(.dossier) .record-highlights li {
+  position: relative;
+  padding: 0 0 15px 21px;
+}
+:where(.dossier) .record-highlights li:before {
+  content: "↗";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+:where(.dossier) .record-media {
+  margin: 0;
+  text-align: center;
+  align-self: start;
+  position: sticky;
+  top: 0;
+  max-width: 320px;
+  width: 100%;
+  justify-self: center;
+}
+:where(.dossier) .record-phone {
+  padding: 8px;
+  background: #15151b;
+  border-radius: 38px;
+  box-shadow:
+    0 18px 30px -15px #0007,
+    0 0 0 1px #fff3;
+  max-width: 260px;
+  margin: 0 auto;
+  position: relative;
+}
+:where(.dossier) .record-phone:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 17px;
+  width: 67px;
+  border-radius: 20px;
+  background: #111;
+  pointer-events: none;
+}
+:where(.dossier) .record-video .record-phone:after {
+  display: none;
+}
+:where(.dossier) .record-phone-screen {
+  overflow: hidden;
+  border-radius: 30px;
+  background: #19181d;
+}
+:where(.dossier) .record-phone-screen video,
+:where(.dossier) .record-phone-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+:where(.dossier) .record-phone-screen [hidden] {
+  display: none;
+}
+:where(.dossier) .record-app-store {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  margin-top: 20px;
+  padding: 8px 15px;
+  border: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-radius: 12px;
+  background: #111b2cba;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  box-shadow: 0 5px 16px -10px #0009;
+}
+:where(.dossier) .record-app-store:hover {
+  border-bottom-color: color-mix(in srgb, currentColor 35%, transparent);
+}
+:where(.dossier) .record-app-store svg {
+  flex-shrink: 0;
+}
+:where(.dossier) .record-app-store-kicker,
+:where(.dossier) .record-app-store-name {
+  display: block;
+}
+:where(.dossier) .record-app-store-kicker {
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.025em;
+}
+:where(.dossier) .record-app-store-name {
+  font-size: 17px;
+  font-weight: 750;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+:where(.dossier) .record-media-caption,
+:where(.dossier) .record-media-status {
+  font-size: 10px;
+  line-height: 1.7;
+  margin: 14px auto 0;
+  max-width: 240px;
+}
+:where(.dossier) .record-media-caption {
+  opacity: 0.8;
+}
+:where(.dossier) .record-media-status[hidden] {
+  display: none;
+}
+:where(.dossier) .record-gallery-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  max-width: 260px;
+  margin: 20px auto 0;
+}
+:where(.dossier) .record-gallery-controls button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, currentColor 40%, transparent);
+  color: inherit;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 19px;
+}
+:where(.dossier) .record-gallery-controls [data-gallery-toggle] {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 0;
+  padding: 10px 8px;
+  font-size: 10px;
+  font-weight: 650;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+:where(.dossier) .record-gallery-controls button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+:where(.dossier) .record-app-store:focus-visible,
+:where(.dossier) .record-gallery-controls button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+:where(.dossier) .record-progression {
+  max-width: 1160px;
+  margin: 44px auto 0;
+  padding-top: 30px;
+  border-top: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+}
+:where(.dossier) .record-timeline {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  gap: 32px 40px;
+  padding: 0;
+  margin: 24px 0 0;
+}
+:where(.dossier) .record-timeline-entry {
+  border-left: 1px solid color-mix(in srgb, currentColor 35%, transparent);
+  padding-left: 18px;
+}
+:where(.dossier) .record-timeline-dates {
+  font-size: 10px;
+  margin: 0 0 12px;
+  letter-spacing: 0.04em;
+}
+:where(.dossier) .record-timeline h4 {
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+:where(.dossier) .record-timeline-entry > p:last-child {
+  font-size: 14px;
+  line-height: 1.9;
+  margin: 0;
+}
+:where(.dossier) .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.dossier:not([data-enhanced]) .folder {
+  background: var(--folder-color);
+  color: var(--folder-ink);
+  border-radius: 16px;
+  margin: 24px 0;
+  padding: 24px;
+}
+.dossier:not([data-enhanced]) .folder-sizing {
+  position: relative;
+}
+.dossier:not([data-enhanced]) .folder-content {
+  position: relative;
+  inset: auto;
+  padding: 0;
+  pointer-events: auto;
+  overflow: visible;
+}
+.dossier:not([data-enhanced]) .folder-back-shadow,
+.dossier:not([data-enhanced]) .folder-opening-shadow,
+.dossier:not([data-enhanced]) .folder-crease,
+.dossier:not([data-enhanced]) .folder-silhouette,
+.dossier:not([data-enhanced]) .folder-cover,
+.dossier:not([data-enhanced]) .cabinet-front,
+.dossier:not([data-enhanced]) .cabinet-hint {
+  display: none;
+}
+.dossier:not([data-enhanced]) .folder-tab-viewport {
+  position: relative;
+  height: 60px;
+}
+.dossier:not([data-enhanced]) .record-scroll {
+  overflow: visible;
+}
+
+@media (max-width: 760px) {
+  :where(.dossier) .hint-desktop {
+    display: none;
+  }
+  :where(.dossier) .hint-mobile {
+    display: inline;
+  }
+  .dossier {
+    padding: 0 22px 30px;
+  }
+  :where(.dossier) .cabinet-front {
+    left: -6px;
+    right: -6px;
+  }
+  :where(.dossier) .cabinet-stamp {
+    font-size: clamp(29px, 7vw, 48px);
+    padding: 12px 6px 10px;
+    border-width: 4px;
+  }
+  :where(.dossier) .cabinet-hint {
+    font-size: 10px;
+    margin-top: 28px;
+  }
+  :where(.dossier) .folder-content {
+    padding: 0 24px max(12px, env(safe-area-inset-bottom));
+  }
+  :where(.dossier) .record-header {
+    align-items: start;
+    gap: 10px;
+    padding: 16px 0 22px;
+    flex-direction: column;
+  }
+  :where(.dossier) .record-company {
+    font-size: 16px;
+  }
+  :where(.dossier) .record-role {
+    font-size: 11px;
+  }
+  :where(.dossier) .record-dates {
+    font-size: 10px;
+  }
+  :where(.dossier) .record-scroll {
+    padding: 26px 0 40px;
+  }
+  :where(.dossier) .record-scroll-frame {
+    --record-scroll-edge-size: 20px;
+  }
+  :where(.dossier) .record-scroll-edge {
+    right: 0;
+  }
+  :where(.dossier) .record-layout--media {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 34px;
+  }
+  :where(.dossier) .record-headline {
+    font-size: 39px;
+  }
+  :where(.dossier) .record-summary {
+    font-size: 13px;
+  }
+  :where(.dossier) .record-section {
+    font-size: 12px;
+  }
+  :where(.dossier) .record-chips {
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+  :where(.dossier) .record-chips li {
+    font-size: 9px;
+    padding: 6px 8px;
+  }
+  :where(.dossier) .record-media {
+    position: static;
+  }
+  :where(.dossier) .record-timeline {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 26px;
+  }
+  :where(.dossier) .record-close {
+    right: var(--record-right, 18px);
+    top: var(--record-top, 22px);
+    padding: 0 16px;
+    min-width: 68px;
+  }
+  :where(.dossier) .record-progression {
+    margin-top: 32px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dossier * {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* The portfolio's .wrap supplies the page gutter; reserve only the cabinet's
+   small overhang here instead of adding the standalone preview's second gutter. */
+.dossier--embedded {
+  max-width: none;
+  margin-top: clamp(40px, 5vw, 64px);
+  padding: 0 10px;
+}
+@media (max-width: 760px) {
+  .dossier--embedded {
+    margin-top: 34px;
+    padding: 0 6px;
+  }
+}
+
+/* beforeprint returns a portaled scene to its home. Print every record as normal
+   document content, independently of the current enhanced or selected state. */
+@media print {
+  .dossier {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    color: #222 !important;
+  }
+  .dossier * {
+    color: #222 !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .dossier
+    :is(
+      .scene-home,
+      .cabinet-scene,
+      .folder,
+      .folder-sizing,
+      .folder-content,
+      .record-scroll-frame,
+      .record-scroll
+    ) {
+    position: static !important;
+    inset: auto !important;
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-width: none !important;
+    max-height: none !important;
+    transform: none !important;
+    transform-origin: initial !important;
+    will-change: auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    clip-path: none !important;
+    contain: none !important;
+    isolation: auto !important;
+    pointer-events: auto !important;
+  }
+  .dossier :is(.scene-home, .cabinet-scene) {
+    margin: 0 !important;
+  }
+  .dossier .folder {
+    margin: 22pt 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border-radius: 0 !important;
+    break-inside: auto;
+  }
+  .dossier .folder:first-child {
+    margin-top: 0 !important;
+  }
+  .dossier :is(.folder-content, .record-scroll) {
+    padding: 0 !important;
+  }
+  .dossier
+    :is(
+      .folder-tab-viewport,
+      .folder-silhouette,
+      .folder-cover,
+      .folder-back-shadow,
+      .folder-opening-shadow,
+      .folder-crease,
+      .cabinet-front,
+      .cabinet-hint,
+      .cabinet-note,
+      .record-close,
+      .record-scroll-edge,
+      .record-phone,
+      .record-gallery-controls,
+      .record-media-caption,
+      .record-media-status
+    ),
+  .dossier dialog {
+    display: none !important;
+  }
+  .dossier .record-header {
+    display: block;
+    padding: 0 0 10pt;
+    border-bottom: 1px solid #aaa;
+    break-inside: avoid;
+    break-after: avoid;
+  }
+  .dossier .record-company {
+    font-size: 16pt;
+    margin: 0 0 4pt;
+  }
+  .dossier :is(.record-role, .record-dates) {
+    font-size: 10pt;
+    line-height: 1.5;
+    white-space: normal;
+  }
+  .dossier .record-dates {
+    margin-top: 4pt;
+  }
+  .dossier .record-layout {
+    display: block;
+    max-width: none;
+    margin-top: 12pt;
+  }
+  .dossier .record-headline {
+    font-size: 20pt;
+    max-width: none;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+  .dossier
+    :is(
+      .record-summary,
+      .record-section,
+      .record-timeline-entry > p:last-child
+    ) {
+    font-size: 10.5pt;
+    line-height: 1.5;
+    max-width: none;
+  }
+  .dossier :is(.record-section, .record-progression) {
+    padding: 0 !important;
+    background: none !important;
+  }
+  .dossier .record-section p {
+    margin-bottom: 10pt;
+  }
+  .dossier .record-section-title {
+    font-size: 9pt;
+    margin-bottom: 8pt;
+    break-after: avoid;
+  }
+  .dossier .record-highlights li {
+    padding-bottom: 6pt;
+    break-inside: avoid;
+  }
+  .dossier .record-chips {
+    gap: 4pt;
+    margin-bottom: 12pt;
+  }
+  .dossier .record-chips li {
+    font-size: 8pt;
+    padding: 3pt 5pt;
+    border-color: #aaa;
+    break-inside: avoid;
+  }
+  .dossier .record-progression {
+    margin-top: 16pt;
+    padding-top: 12pt !important;
+    border-color: #aaa;
+  }
+  .dossier .record-timeline {
+    display: block;
+    margin-top: 10pt;
+  }
+  .dossier .record-timeline-entry {
+    margin-bottom: 10pt;
+    border-color: #aaa;
+    break-inside: avoid;
+  }
+  .dossier .record-timeline h4 {
+    font-size: 10.5pt;
+    margin-bottom: 5pt;
+  }
+  .dossier .record-timeline-dates {
+    font-size: 9pt;
+    margin-bottom: 5pt;
+  }
+  .dossier .record-media {
+    position: static;
+    display: block;
+    max-width: none;
+    text-align: left;
+    margin: 10pt 0;
+  }
+  .dossier .record-app-store {
+    display: inline;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
+  .dossier .record-app-store svg {
+    display: none;
+  }
+  .dossier :is(.record-app-store-kicker, .record-app-store-name) {
+    display: inline;
+    font-size: 9pt;
+    line-height: 1.5;
+  }
+  .dossier .record-app-store-kicker::after {
+    content: " ";
+  }
+  .dossier a {
+    color: #222 !important;
+    text-decoration: underline;
+    border: 0 !important;
+  }
+  .dossier a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 8pt;
+    word-break: break-all;
+  }
+}
+/* Public component tokens. No host fonts or global document rules. */
+.dossier {
+  padding: 0 12px 24px;
+  max-width: none;
+  min-width: 0;
+  font-size: 16px;
+  --df-body: system-ui, sans-serif;
+  --df-display: Georgia, serif;
+}
+.dossier[data-font="modern"] {
+  --df-display: system-ui, sans-serif;
+}
+.dossier[data-font="mono"] {
+  --df-display: ui-monospace, monospace;
+  --df-body: ui-monospace, monospace;
+}
+.dossier .cabinet-front {
+  background: var(--cabinet-color, #152238);
+}
+.dossier .cabinet-stamp {
+  font-family: var(--df-body);
+  font-weight: 900;
+  font-size: clamp(24px, 4vw, 58px);
+  opacity: 0.65;
+}
+.dossier .folder-tab {
+  gap: 8px;
+  padding-inline: 12px;
+  color: var(--folder-ink);
+}
+.dossier .folder-tab span {
+  font: 700 14px/1.15 var(--df-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dossier .folder-tab img {
+  width: var(--logo-width);
+  height: var(--logo-height);
+  max-width: 85%;
+  max-height: 38px;
+  object-fit: contain;
+  flex-shrink: 1;
+}
+.dossier .folder-tab:has(span) img {
+  max-width: 44%;
+}
+.dossier .record-section,
+.dossier .record-summary {
+  font-size: 16px;
+  line-height: 1.8;
+}
+.dossier .record-role,
+.dossier .record-dates,
+.dossier .record-chips li,
+.dossier .record-gallery-controls [data-gallery-toggle],
+.dossier .record-media-caption,
+.dossier .record-media-status,
+.dossier .cabinet-hint {
+  font-size: 13px;
+}
+.dossier .record-section-title {
+  font-size: 14px;
+}
+.dossier .record-headline {
+  font-size: clamp(30px, 4vw, 56px);
+  overflow-wrap: anywhere;
+}
+.dossier .record-media {
+  position: static;
+  margin: 28px auto;
+  max-width: 100%;
+  width: 100%;
+}
+.dossier .record-media--unframed .record-phone {
+  max-width: 100%;
+  padding: 0;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+  border: 0;
+}
+.dossier .record-media--unframed .record-phone-screen {
+  border-radius: 10px;
+}
+.dossier .record-phone-screen :is(img, video) {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.dossier .record-media-caption {
+  max-width: 100%;
+}
+.dossier .record-action {
+  display: inline-block;
+  margin-top: 12px;
+  min-height: 44px;
+  padding: 12px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.dossier .record-close {
+  font-size: 14px;
+  color: var(--folder-ink, #fff5e7);
+}
+.dossier :is(button, a):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.dossier .record-header {
+  flex-wrap: wrap;
+}
+.dossier .record-dates {
+  white-space: normal;
+}
+.dossier .record-story {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.dossier .record-scroll > .record-section,
+.dossier .record-scroll > .record-progression,
+.dossier .record-scroll > .record-media {
+  margin-top: 32px;
+}
+.dossier .record-scroll :is(input, button, a) {
+  scroll-margin: 16px;
+}
+@media (max-width: 760px) {
+  .dossier .record-headline {
+    font-size: 34px;
+  }
+  .dossier .record-section,
+  .dossier .record-summary {
+    font-size: 16px;
+  }
+  .dossier .record-company {
+    font-size: 18px;
+  }
+}
+@media print {
+  .dossier .record-media-caption {
+    display: block !important;
+  }
+  .dossier .record-media--unframed .record-phone {
+    display: block !important;
+  }
+  .dossier video {
+    display: none !important;
+  }
+}
+
+.dossier .cabinet-material {
+  background:
+    linear-gradient(115deg, #ffffff0c, transparent 65%, #ffffff06),
+    var(--cabinet-color, #152238);
+}
+
+/* Very narrow embeds retain usable controls even when the full reading sheet is scaled down. */
+.dossier[data-compact-tabs="true"][data-state="closed"] .folder-tab {
+  height: calc(44px / var(--df-closed-scale));
+  background: var(--folder-color);
+  border-radius: 18px 18px 0 0;
+}
+.dossier[data-compact-tabs="true"][data-state="closed"] .folder-tab span {
+  font-size: calc(14px / var(--df-closed-scale));
+}
+.dossier[data-compact-tabs="true"][data-state="closed"] .folder-tab img {
+  width: calc(var(--logo-width) / var(--df-closed-scale));
+  height: calc(var(--logo-height) / var(--df-closed-scale));
+  max-height: calc(30px / var(--df-closed-scale));
+}

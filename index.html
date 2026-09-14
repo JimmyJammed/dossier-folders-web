@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#101722" />
+    <meta
+      name="description"
+      content="A tactile folder component for stories, projects, and collections. Customize the live demo and take the code with you."
+    />
+    <title>Dossier Folders — an open-source interface</title>
+  </head>
+  <body>
+    <header class="masthead">
+      <a class="wordmark" href="./"
+        ><span class="brand-mark" aria-hidden="true">▱</span> DOSSIER FOLDERS</a
+      >
+      <nav aria-label="Main">
+        <a href="#integration">Use the component</a
+        ><a href="https://github.com/JimmyJammed/dossier-folders-web"
+          >GitHub ↗</a
+        >
+      </nav>
+    </header>
+    <main>
+      <section class="intro">
+        <p class="eyebrow">OPEN SOURCE / TYPESCRIPT + REACT</p>
+        <h1>Every story has<br />a place.</h1>
+        <p>
+          Pull a folder. Make it yours.<br />Colors, content, and a little
+          depth.
+        </p>
+        <span class="version"
+          >v0.1.0 <span aria-hidden="true">/</span> MIT</span
+        >
+      </section>
+      <section class="workbench" aria-label="Interactive folder editor">
+        <div class="preview-pane">
+          <div class="preview-heading">
+            <span>01 / THE COLLECTION</span
+            ><span id="record-count">6 RECORDS</span>
+          </div>
+          <div id="preview" class="dossier" data-font="editorial">
+            <!--records-->
+          </div>
+          <div class="preview-foot">
+            <span>All organizations and content are fictional.</span
+            ><button id="reset" type="button">Reset demo ↺</button>
+          </div>
+        </div>
+        <aside class="editor" aria-label="Customize folders">
+          <div class="editor-heading">
+            <h2>Make it yours</h2>
+            <p>Changes appear in the collection.</p>
+          </div>
+          <div id="controls"></div>
+          <p id="editor-status" role="status" aria-live="polite"></p>
+        </aside>
+      </section>
+      <section id="integration" class="integration">
+        <div>
+          <p class="eyebrow">02 / TAKE IT WITH YOU</p>
+          <h2>Your content.<br />Your corner of the web.</h2>
+          <p>
+            A framework-neutral core, an optional React adapter, and no account
+            required.
+          </p>
+          <a href="https://github.com/JimmyJammed/dossier-folders-web#readme"
+            >Read the documentation ↗</a
+          >
+        </div>
+        <div class="code-panel">
+          <div class="code-tabs">
+            <button id="vanilla-tab" type="button" aria-pressed="true">
+              TypeScript</button
+            ><button id="react-tab" type="button" aria-pressed="false">
+              React</button
+            ><button id="copy-code" type="button">Copy</button>
+          </div>
+          <pre><code id="snippet"></code></pre>
+          <div class="export-actions">
+            <button id="export-json" type="button">Export JSON ↓</button
+            ><button id="export-zip" type="button">Config + assets ↓</button
+            ><label class="button"
+              >Import JSON<input
+                id="import-json"
+                type="file"
+                accept="application/json,.json"
+                hidden
+            /></label>
+          </div>
+          <p>
+            Local files stay in your browser. Export a bundle to include your
+            assets.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <span>Created by Jimmy Hickman.</span
+      ><span
+        >Component code: MIT ·
+        <a
+          href="https://github.com/JimmyJammed/dossier-folders-web/blob/main/THIRD_PARTY_LICENSES.md"
+          >Dependency notices</a
+        ></span
+      >
+    </footer>
+    <script type="module" src="/demo/main.ts"></script>
+  </body>
+</html>

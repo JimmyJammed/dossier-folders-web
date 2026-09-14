@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-14",
+  "componentRevision": "bf39ffaaf32137b77d21c0cb6d1baf4239041f80",
+  "command": "npm run test:browser",
+  "summary": {
+    "startTime": "2026-09-14T21:53:30.497Z",
+    "duration": 241955.014,
+    "expected": 148,
+    "skipped": 8,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "projects": {
+    "chromium": {
+      "passed": 38,
+      "skipped": 1,
+      "failed": 0
+    },
+    "firefox": {
+      "passed": 38,
+      "skipped": 1,
+      "failed": 0
+    },
+    "webkit": {
+      "passed": 38,
+      "skipped": 1,
+      "failed": 0
+    },
+    "mobile-webkit": {
+      "passed": 34,
+      "skipped": 5,
+      "failed": 0
+    }
+  },
+  "editorFollowUp": {
+    "revision": "591cbf08567fad6453173cb00953ac497a07a980",
+    "passed": 28,
+    "failed": 0,
+    "projects": [
+      "chromium",
+      "firefox",
+      "webkit",
+      "mobile-webkit"
+    ]
+  },
+  "hosted": {
+    "url": "https://hickman.biz/portfolio/dossier-folders",
+    "passed": true,
+    "artifactFilesCompared": 25
+  }
+}
