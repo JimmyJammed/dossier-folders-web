@@ -19,6 +19,10 @@ const base = import.meta.env.BASE_URL;
 let config = makeConfig(base),
   selected = 0,
   language = "vanilla",
+  activePreset = "showcase",
+  rendering = false,
+  newBlockKind = "text",
+  pendingField: HTMLInputElement | undefined,
   timer: ReturnType<typeof setTimeout> | undefined;
 const root = document.querySelector<HTMLElement>("#preview")!,
   controls = document.querySelector<HTMLElement>("#controls")!,
@@ -73,15 +77,18 @@ function blockFields(b: ContentBlock, i: number) {
   return `<details class="block-card" data-block-card="${i}"><summary>${i + 1}. ${b.kind}</summary><div class="fields">${html}<div class="row"><button data-action="block-up" data-block="${i}" ${i === 0 ? "disabled" : ""} aria-label="Move block ${i + 1} up">↑</button><button data-action="block-down" data-block="${i}" ${i === config.options.records[selected].blocks.length - 1 ? "disabled" : ""} aria-label="Move block ${i + 1} down">↓</button><button data-action="block-remove" data-block="${i}">Remove block</button></div></div></details>`;
 }
 function render() {
+  const hadControls = controls.childElementCount > 0;
+  const focusId = controls.contains(document.activeElement) ? document.activeElement?.id : undefined;
   const opened = [
     ...controls.querySelectorAll<HTMLDetailsElement>("details[open]"),
   ].map((d) => d.querySelector("summary")?.textContent);
   const r = config.options.records[selected],
     p = `options.records.${selected}`;
+  rendering = true;
   controls.innerHTML =
     details(
       "Collection",
-      `<label class="field">Preset<select id="preset"><option value="showcase">Six-record showcase</option><option value="compact">Three projects</option><option value="neutral">Neutral collection</option></select></label>${area("Cabinet label", "options.cabinet.label", config.options.cabinet?.label)}<div class="row">${input("Cabinet", "options.cabinet.color", config.options.cabinet?.color, "color")}${input("Stamp", "options.cabinet.stampColor", config.options.cabinet?.stampColor, "color")}${input("Page", "background", config.background, "color")}</div>${select("Typography", "options.cabinet.font", config.options.cabinet?.font ?? "editorial", ["editorial", "modern", "mono"])}${input("Show hint", "options.showHint", config.options.showHint !== false, "checkbox")}${input("Hint text", "options.labels.hint", config.options.labels?.hint ?? "Select a tab. Open a story.")}${select("Layout", "options.layout", config.options.layout ?? "auto", ["auto", "stack"])}${select("Motion", "options.motion", config.options.motion ?? "auto", ["auto", "reduced"])}${input("Automatic media", "options.autoplay", config.options.autoplay !== false, "checkbox")}`,
+      `<label class="field">Preset<select id="preset"><option value="custom" disabled>Custom configuration</option><option value="showcase">Six-record showcase</option><option value="compact">Three projects</option><option value="neutral">Neutral collection</option></select></label>${area("Cabinet label", "options.cabinet.label", config.options.cabinet?.label)}<div class="row">${input("Cabinet", "options.cabinet.color", config.options.cabinet?.color, "color")}${input("Stamp", "options.cabinet.stampColor", config.options.cabinet?.stampColor, "color")}${input("Page", "background", config.background, "color")}</div>${select("Typography", "options.cabinet.font", config.options.cabinet?.font ?? "editorial", ["editorial", "modern", "mono"])}${input("Show hint", "options.showHint", config.options.showHint !== false, "checkbox")}${input("Hint text", "options.labels.hint", config.options.labels?.hint ?? "Select a tab. Open a story.")}${select("Layout", "options.layout", config.options.layout ?? "auto", ["auto", "stack"])}${select("Motion", "options.motion", config.options.motion ?? "auto", ["auto", "reduced"])}${input("Automatic media", "options.autoplay", config.options.autoplay !== false, "checkbox")}`,
       true,
     ) +
     details(
@@ -94,9 +101,11 @@ function render() {
       `${input("Subtitle", `${p}.subtitle`, r.subtitle)}${input("Dates", `${p}.dates`, r.dates)}${input("Headline", `${p}.headline`, r.headline)}${area("Summary", `${p}.summary`, r.summary)}${area("Chips — one per line", `${p}.chips`, r.chips, "lines")}${select("Content layout", `${p}.contentLayout`, r.contentLayout ?? "flow", ["flow", "featured"])}${r.blocks.map(blockFields).join("")}<label class="field">New content block<select id="new-block-kind"><option>text</option><option>timeline</option><option>image</option><option>video</option><option>gallery</option></select></label><button data-action="block-add">Add content block</button>`,
     );
   controls.querySelectorAll<HTMLDetailsElement>("details").forEach((d) => {
-    if (opened.includes(d.querySelector("summary")?.textContent)) d.open = true;
+    if (hadControls) d.open = opened.includes(d.querySelector("summary")?.textContent);
   });
   refresh();
+  if (focusId) controls.querySelector<HTMLElement>(`#${CSS.escape(focusId)}`)?.focus({preventScroll: true});
+  rendering = false;
 }
 function luminance(hex: string) {
   const rgb = hex
@@ -109,6 +118,11 @@ function luminance(hex: string) {
   return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
 }
 function refresh() {
+  (controls.querySelector("#preset") as HTMLSelectElement).value = activePreset;
+  (controls.querySelector("#new-block-kind") as HTMLSelectElement).value = newBlockKind;
+  const recordSelect = controls.querySelector<HTMLSelectElement>("#record-select")!;
+  [...recordSelect.options].forEach((option, i) => { option.textContent = `${i + 1}. ${config.options.records[i].title}`; });
+  recordSelect.value = String(selected);
   document.body.style.setProperty("--page-bg", config.background);
   document.querySelector("#record-count")!.textContent =
     `${config.options.records.length} RECORDS`;
@@ -133,11 +147,15 @@ function releaseUnused() {
       uploads.delete(url);
     }
 }
-function apply(next: DossierConfig, repaint = false) {
+function apply(next: DossierConfig, repaint = false, presetName?: string) {
   validateOptions(next.options, true);
   if (!isColor(next.background))
     throw new Error("background: use a six-digit hex color");
-  api.update(next.options);
+  const changed = JSON.stringify(next) !== JSON.stringify(config);
+  if (changed) api.update(next.options);
+  clearTimeout(timer);
+  pendingField = undefined;
+  activePreset = presetName ?? (changed ? "custom" : activePreset);
   config = next;
   releaseUnused();
   message("");
@@ -182,10 +200,13 @@ function readField(
   el.removeAttribute("aria-invalid");
 }
 controls.addEventListener("input", (event) => {
+  if (rendering) return;
   const el = event.target as HTMLInputElement;
   if (!el.dataset.path) return;
   clearTimeout(timer);
+  pendingField = el;
   timer = setTimeout(() => {
+    if (!el.isConnected) return;
     try {
       readField(el);
     } catch (error) {
@@ -194,7 +215,16 @@ controls.addEventListener("input", (event) => {
     }
   }, 250);
 });
+function flushPending() {
+  const field = pendingField;
+  pendingField = undefined;
+  clearTimeout(timer);
+  if (field?.isConnected) {
+    try { readField(field); } catch (error) { message((error as Error).message); }
+  }
+}
 controls.addEventListener("change", async (event) => {
+  if (rendering) return;
   const el = event.target as HTMLInputElement;
   if (el.dataset.path) {
     clearTimeout(timer);
@@ -206,13 +236,15 @@ controls.addEventListener("change", async (event) => {
     }
     return;
   }
+  if (el.id === "new-block-kind") newBlockKind = el.value;
   if (el.id === "record-select") {
+    flushPending();
     selected = Number(el.value);
     render();
   }
   if (el.id === "preset") {
     selected = 0;
-    apply(preset(el.value, base), true);
+    apply(preset(el.value, base), true, el.value);
   }
   if (el.dataset.asset && el.files?.[0]) {
     const file = el.files[0];
@@ -276,6 +308,7 @@ controls.addEventListener("click", (event) => {
     "[data-action]",
   );
   if (!b || b.disabled) return;
+  flushPending();
   const action = b.dataset.action!,
     next = clone(config),
     records = next.options.records as FolderRecord[],
@@ -374,7 +407,8 @@ function download(blob: Blob, name: string) {
 }
 document.querySelector("#reset")!.addEventListener("click", () => {
   selected = 0;
-  apply(makeConfig(base), true);
+  newBlockKind = "text";
+  apply(makeConfig(base), true, "showcase");
 });
 for (const type of ["vanilla", "react"])
   document.querySelector(`#${type}-tab`)!.addEventListener("click", () => {
@@ -463,7 +497,8 @@ document
       if (next.options.records.length < 1 || next.options.records.length > 12)
         throw new Error("The editor supports 1–12 records.");
       selected = 0;
-      apply(next, true);
+      newBlockKind = "text";
+      apply(next, true, "custom");
       message(
         "Configuration imported. Relative assets must be available at their configured paths.",
       );
