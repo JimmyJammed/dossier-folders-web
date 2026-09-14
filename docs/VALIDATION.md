@@ -1,4 +1,20 @@
-# Local validation — v0.1.0
+# Local validation — v0.1.1
+
+Verified **2026-09-14**, macOS / Node 26.7.0 / Playwright 1.63.0.
+Component fixes: `9c533c24be0f0809178238be3180f418c7b04a30`.
+Final demo fix: `a36807e3e196da077fa9d3eadd7da6fb9567d7dc`. Later changes are documentation/previews only.
+
+- Three new WebKit regression tests reproduced all reported bugs on v0.1.0: gray hover background, rectangular compact label, and opening skipped by scrollbar removal.
+- Full run: **159 passed, 9 platform skips, 4 unsuccessful**. Three Chromium geometry/interruption checks were interrupted by a development-server reload during the version update; all three passed on rerun. The remaining WebKit editor click failure persisted on rerun and was fixed by removing page-level smooth scrolling.
+- Final affected editor/presentation run: **39 passed, 1 mobile-hover skip, 0 failed** across Chromium, Firefox, WebKit, and mobile WebKit. This overlaps the full run; it is not 39 additional unique checks. Combined coverage resolves all 163 applicable browser scenarios; the complete suite was not rerun after the one-line demo scrolling fix.
+- Lint, TypeScript, production demo/library builds, product scans, and **10 unit tests passed**.
+- The v0.1.1 tarball passed isolated vanilla, React 18, and React 19 installation, type/build, SSR/hydration/Strict Mode and interaction checks, as applicable.
+- The nested production artifact passed desktop/mobile, refresh, JSON import, ZIP media contents, and opening/closing checks. A separate WebKit check confirmed transparent hover labels, accessible continuous compact tabs, and a full opening lasting approximately 2.6 seconds under simulated classic-scrollbar removal.
+- Intermediate-width hover, extraction, transport/unfold, and mobile previews were visually reviewed. No physical-device or dedicated screen-reader testing was performed.
+
+[Machine-readable run summaries](validation-v0.1.1.json). No automatic GitHub Actions workloads were added.
+
+## v0.1.0 historical validation
 
 Verified on **2026-09-14** using macOS, Node **26.7.0**, npm, and
 Playwright **1.63.0**. These are recorded local results, not hosted CI badges.

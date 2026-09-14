@@ -8,7 +8,6 @@
   --muted: #9aa5b5;
   --line: #ffffff19;
   --panel: #17202d;
-  scroll-behavior: smooth;
 }
 * {
   box-sizing: border-box;
@@ -38,7 +37,7 @@ a {
   color: inherit;
   text-underline-offset: 4px;
 }
-button,
+button:not(.dossier button),
 .button {
   background: #253244;
   border: 1px solid #ffffff24;
@@ -50,11 +49,11 @@ button,
   font-size: 13px;
   font-weight: 600;
 }
-button:hover,
+button:not(.dossier button):hover,
 .button:hover {
   background: #34465e;
 }
-button:disabled {
+button:not(.dossier button):disabled {
   opacity: 0.4;
   cursor: default;
 }

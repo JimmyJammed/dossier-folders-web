@@ -26,7 +26,6 @@ type Folder = {
 };
 const TAB_HEIGHT = 64;
 const HOVER_LIFT = 16;
-const COVER_TOP = TAB_HEIGHT + 6;
 const STACK_ROW = 48;
 const STACK_FACE = 160;
 const RECESSED_SCALE = 0.88;
@@ -96,6 +95,7 @@ export function initDossier(
   let closedPaperHeight = 0;
   let cabinetTop = 0;
   let tabWidth = 0;
+  let tabHeight = TAB_HEIGHT;
   let railWidth = 0;
   let railScroll = 0;
   let storedRailScroll = 0;
@@ -152,7 +152,7 @@ export function initDossier(
     h: number,
     x: number,
     tabW: number,
-    b = TAB_HEIGHT,
+    b = tabHeight,
   ) {
     const left = x + 3,
       right = x + tabW - 3,
@@ -193,18 +193,20 @@ export function initDossier(
       `${HOVER_LIFT / closedScale + 2}px`,
     );
     folder.content.style.clipPath = "none";
+    const coverTop = tabHeight + 6;
+    folder.sizing.style.setProperty("--df-tab-height", `${tabHeight}px`);
     Object.assign(folder.cover.style, {
       left: "3px",
       width: `${w - 6}px`,
-      top: `${COVER_TOP}px`,
-      height: `${h - COVER_TOP - 3}px`,
+      top: `${coverTop}px`,
+      height: `${h - coverTop - 3}px`,
     });
-    folder.hinge.resize(w - 6, h - COVER_TOP - 3, h, COVER_TOP);
+    folder.hinge.resize(w - 6, h - coverTop - 3, h, coverTop);
     const x = tabX(folder);
     folder.track.style.width = `${railWidth}px`;
     Object.assign(folder.tab.style, { left: `${x}px`, width: `${tabWidth}px` });
     folder.tab.style.top = "4px";
-    folder.rail.style.height = `${Math.max(68 + HOVER_LIFT / closedScale, stacked && closedScale < 0.65 ? 48 / closedScale : 0)}px`;
+    folder.rail.style.height = `${tabHeight + 4 + HOVER_LIFT / closedScale}px`;
     gsap.set(folder.tab, { x: 0, scaleX: 1, scaleY: 1 });
     folder.sizing.style.clipPath = closedClip();
     silhouette(folder, w, h, x - railScroll, tabWidth);
@@ -223,12 +225,16 @@ export function initDossier(
     root.dataset.layout = stacked ? "stack" : "rail";
     closedScale = Math.min(0.9, home.clientWidth / paperWidth);
     width = paperWidth * closedScale;
-    root.dataset.compactTabs = String(stacked && closedScale < 0.65);
+    const compactTabs = stacked && closedScale < 0.65;
+    root.dataset.compactTabs = String(compactTabs);
+    // Grow the actual paper silhouette with the hit target, never paint a
+    // rectangular button over it. Retain one immutable layout through opening.
+    tabHeight = compactTabs ? Math.max(TAB_HEIGHT, 12 + 44 / closedScale) : TAB_HEIGHT;
     root.style.setProperty("--df-closed-scale", String(closedScale));
     // Expose every phone tab above a compact cabinet face. Keep the underlying
     // reading layout full size; its mask expands as the selected sheet lifts out.
     closedPaperHeight = stacked
-      ? Math.min(paperHeight, TAB_HEIGHT + STACK_FACE / closedScale)
+      ? Math.min(paperHeight, tabHeight + STACK_FACE / closedScale)
       : paperHeight;
     const lastRow = stacked ? Math.max(0, records.length - 1) * STACK_ROW : 0;
     height = closedPaperHeight * closedScale + lastRow;
@@ -244,7 +250,7 @@ export function initDossier(
     scene.style.height = `${height}px`;
     scene.style.width = `${width}px`;
     scene.style.marginInline = "auto";
-    cabinetTop = lastRow + (TAB_HEIGHT + 13) * closedScale;
+    cabinetTop = lastRow + (tabHeight + 13) * closedScale;
     cabinet.style.top = `${cabinetTop}px`;
     folders.forEach((folder) => {
       sizeFolder(folder, paperWidth, paperHeight);
@@ -352,7 +358,7 @@ export function initDossier(
     const buttonHeight = closeButton.offsetHeight || 44;
     const paperScale = rendered ? rect.height / paperHeight : 1;
     let right = rect.left + rect.width;
-    let top = rect.top + TAB_HEIGHT * paperScale - 12 - buttonHeight;
+    let top = rect.top + tabHeight * paperScale - 12 - buttonHeight;
     if (selected) {
       const renderedTab = rendered?.tab.getBoundingClientRect();
       const tabLeft =
@@ -635,6 +641,10 @@ export function initDossier(
     dialog.showModal();
     document.body.style.overflow = "hidden";
     dialog.focus({ preventScroll: true });
+    // showModal/scroll locking can remove a classic scrollbar. Its queued
+    // viewport resize is our own layout change, not a reason to end the motion.
+    // Measure after forcing the locked layout; genuine later resizes still settle.
+    measuredViewport = viewportBounds();
     // Chromium's native showModal autofocus can scroll even inert descendants.
     // Restore the mounted content before the first frame, just like the rails.
     folder.scroll.scrollLeft = readingScroll.left;
@@ -774,6 +784,10 @@ export function initDossier(
     if (!selected || state === "closed" || state === "closing") return;
     setState("closing");
     dialog.focus({ preventScroll: true });
+    // showModal/scroll locking can remove a classic scrollbar. Its queued
+    // viewport resize is our own layout change, not a reason to end the motion.
+    // Measure after forcing the locked layout; genuine later resizes still settle.
+    measuredViewport = viewportBounds();
     pauseMedia();
     selected.content.inert = true;
     selected.cover.style.visibility = "";
