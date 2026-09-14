@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-14",
+  "componentRevision": "9c533c24be0f0809178238be3180f418c7b04a30",
+  "finalDemoRevision": "a36807e3e196da077fa9d3eadd7da6fb9567d7dc",
+  "fullRun": {
+    "startTime": "2026-09-14T22:11:51.268Z",
+    "duration": 253042.277,
+    "expected": 159,
+    "skipped": 9,
+    "unexpected": 4,
+    "flaky": 0
+  },
+  "rerun": {
+    "startTime": "2026-09-14T22:16:14.059Z",
+    "duration": 18386.582,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  },
+  "finalEditorAndPresentation": {
+    "startTime": "2026-09-14T22:17:50.940Z",
+    "duration": 25131.832000000002,
+    "expected": 39,
+    "skipped": 1,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "note": "Full run had three Chromium checks interrupted by a Vite reload and one WebKit editor click failure. Chromium checks passed on rerun; removing page-level smooth scrolling fixed the editor failure. Final editor/presentation run passed 39, skipped one mobile hover check. Results overlap; do not sum run counts."
+}
