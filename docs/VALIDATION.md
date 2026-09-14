@@ -15,6 +15,7 @@ The documented minimum Node version is 22.18; that exact runtime was not tested.
 
 | Check | Actual result |
 | --- | --- |
+| Fresh public clone at `5f0f6294ee85de21adbc0fffca3b44cb2e33c684` | `npm ci`, `npm run check`, and `npm run pack:library` passed; archive identical to release candidate |
 | `npm run check` | Passed lint, TypeScript, production demo/library builds, 10 unit tests, and product scan |
 | `npm run test:browser` | 148 passed, 8 intentionally skipped, 0 failed; 156 scheduled |
 | Final editor regression run across all four browser projects | 28 passed, 0 failed |
