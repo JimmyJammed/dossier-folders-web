@@ -1,0 +1,1 @@
+All logos, interface illustrations, and silent interface recordings in this directory are original fictional demonstrations created for Dossier Folders. MIT license. No real organizations, user data, or third-party imagery. Regenerate with npm run generate:assets (requires ffmpeg and Playwright Chromium).
