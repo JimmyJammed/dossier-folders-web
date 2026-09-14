@@ -1,0 +1,19 @@
+{
+  "date": "2026-09-14",
+  "sourceRevision": "63e703945abf2b938f30ed31f595946a64da6095",
+  "command": "npx playwright test tests/menu-state.spec.ts tests/editor.spec.ts",
+  "stats": {
+    "startTime": "2026-09-14T22:23:51.031Z",
+    "duration": 18353.484,
+    "expected": 40,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "coverage": [
+    "chromium",
+    "firefox",
+    "webkit",
+    "mobile-webkit"
+  ]
+}

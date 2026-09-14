@@ -1,4 +1,14 @@
-# Local validation — v0.1.1
+# Local validation — v0.1.2
+
+Verified **2026-09-14**, source `63e703945abf2b938f30ed31f595946a64da6095`, macOS / Node 26.7.0 / Playwright 1.63.0.
+
+- **40 editor/menu browser checks passed, zero failures or skips**, across Chromium, Firefox, WebKit, and mobile WebKit.
+- Covers all preset round trips, edited/imported custom state, reset, pending edits, record renaming/reordering/duplication/removal, action limits, block-kind persistence, field-select persistence, focus, collapsed sections, and existing editor/export behavior.
+- Lint, TypeScript, demo/library production builds, **10 unit tests**, product scan, and package generation passed.
+- Library implementation and animation code are unchanged from v0.1.1. Geometry and packed-consumer browser suites were not repeated for this editor-only patch.
+- No physical-device testing or GitHub Actions run is implied. [Machine-readable results](validation-v0.1.2.json).
+
+## v0.1.1 historical validation
 
 Verified **2026-09-14**, macOS / Node 26.7.0 / Playwright 1.63.0.
 Component fixes: `9c533c24be0f0809178238be3180f418c7b04a30`.
