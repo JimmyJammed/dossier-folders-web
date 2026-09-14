@@ -8,7 +8,6 @@
   --muted: #9aa5b5;
   --line: #ffffff19;
   --panel: #17202d;
-  scroll-behavior: smooth;
 }
 * {
   box-sizing: border-box;
