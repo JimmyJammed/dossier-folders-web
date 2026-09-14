@@ -1,3 +1,4 @@
+import { mapAssets, safeArchivePath } from "./portable.ts";
 import "../src/styles.css";
 import "./style.css";
 import {
@@ -332,7 +333,7 @@ controls.addEventListener("click", (event) => {
     }
   }
   if (action === "auto-ink")
-    r.ink = luminance(r.fill) > 0.179 ? "#152238" : "#fff5e7";
+    r.ink = luminance(r.fill) > 0.179 ? "#000000" : "#ffffff";
   if (action === "palette") {
     const colors = [
       "#2d4860",
@@ -354,12 +355,14 @@ controls.addEventListener("click", (event) => {
   }
 });
 function portable() {
-  const c = clone(config);
-  let serialized = JSON.stringify(c);
-  for (const [url, { path }] of uploads)
-    serialized = serialized.split(url).join(path);
-  serialized = serialized.split(`${base}assets/`).join("assets/");
-  return JSON.parse(serialized) as DossierConfig;
+  return mapAssets(
+    config,
+    (source) =>
+      uploads.get(source)?.path ??
+      (source.startsWith(`${base}assets/`)
+        ? source.replace(`${base}assets/`, "assets/")
+        : source),
+  );
 }
 function download(blob: Blob, name: string) {
   const url = URL.createObjectURL(blob),
@@ -418,13 +421,13 @@ document.querySelector("#export-zip")!.addEventListener("click", async () => {
         ),
       };
     const paths = new Set<string>();
-    function walk(x: any) {
-      if (typeof x === "string" && x.startsWith("assets/")) paths.add(x);
-      else if (Array.isArray(x)) x.forEach(walk);
-      else if (x && typeof x === "object") Object.values(x).forEach(walk);
-    }
-    walk(c);
+    mapAssets(c, (source) => {
+      if (source.startsWith("assets/")) paths.add(source);
+      return source;
+    });
     for (const path of paths) {
+      if (!safeArchivePath(path))
+        throw new Error(`Unsafe archive asset path: ${path}`);
       const local = [...uploads.values()].find((v) => v.path === path);
       if (local) files[path] = new Uint8Array(await local.file.arrayBuffer());
       else {
@@ -454,7 +457,9 @@ document
       file = input.files?.[0];
     if (!file) return;
     try {
-      const next = parseConfig(await file.text());
+      const next = mapAssets(parseConfig(await file.text()), (source) =>
+        source.startsWith("assets/") ? `${base}${source}` : source,
+      );
       if (next.options.records.length < 1 || next.options.records.length > 12)
         throw new Error("The editor supports 1–12 records.");
       selected = 0;

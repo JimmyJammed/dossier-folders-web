@@ -71,13 +71,11 @@ test("invalid configuration preserves the preview; JSON export round trips", asy
   page,
 }) => {
   await page.goto("/");
-  await page
-    .locator("#import-json")
-    .setInputFiles({
-      name: "bad.json",
-      mimeType: "application/json",
-      buffer: Buffer.from('{"version":99}'),
-    });
+  await page.locator("#import-json").setInputFiles({
+    name: "bad.json",
+    mimeType: "application/json",
+    buffer: Buffer.from('{"version":99}'),
+  });
   await expect(page.locator("#editor-status")).toContainText("version");
   await expect(page.locator(".folder-tab")).toHaveCount(6);
   const download = page.waitForEvent("download");
@@ -136,4 +134,18 @@ test("200 percent zoom equivalent keeps editor and modal reachable", async ({
   await expect(
     page.getByRole("button", { name: "Open Northstar Archive", exact: true }),
   ).toBeFocused();
+});
+test("auto ink chooses accessible contrast on middle-gray folders", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.locator('[data-path="options.records.0.fill"]').fill("#808080");
+  await expect(page.locator('[data-folder="orbit-market"]')).toHaveAttribute(
+    "style",
+    /808080/,
+  );
+  await page.locator('[data-action="auto-ink"]').click();
+  await expect(page.locator("#contrast")).toContainText(
+    "Meets normal-text AA contrast",
+  );
 });

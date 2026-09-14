@@ -20,7 +20,8 @@
     "generate:assets": "node scripts/generate-assets.mjs",
     "verify:product": "node scripts/verify-product.mjs",
     "verify:consumers": "node scripts/verify-consumers.mjs",
-    "check": "npm run lint && npm run build && npm test && npm run verify:product"
+    "check": "npm run lint && npm run build && npm test && npm run verify:product",
+    "verify:hosted": "node scripts/check-hosted.mjs"
   },
   "dependencies": {
     "gsap": "3.15.0"
